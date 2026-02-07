@@ -2,65 +2,36 @@
  * Copyright (c) 2016-present. 贵州纳雍穿青人李裕江 and All Contributors.
  *
  * The software is licensed under the Mulan PSL v2.
- * You can use this software according to the terms and conditions of the Mulan PSL v2.
- * You may obtain a copy of Mulan PSL v2 at:
- *     http://license.coscl.org.cn/MulanPSL2
- * THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
- * PURPOSE.
- * See the Mulan PSL v2 for more details.
+ * You may obtain a copy of Mulan PSL v2 at: http://license.coscl.org.cn/MulanPSL2
  */
 
 buildscript {
+    ext.agpVersion = '8.2.2'
     repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.2.2'
+        classpath "com.android.tools.build:gradle:${agpVersion}"
     }
+}
+
+ext {
+    compileSdk = 36
+    minSdk = 21
+    targetSdk = 34
 }
 
 allprojects {
-    repositories {
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" }
-        maven { url 'https://developer.huawei.com/repo' }
-        maven { url 'https://developer.hihonor.com/repo' }
-    }
-}
-
-subprojects {
-    gradle.projectsEvaluated {
-        tasks.withType(JavaCompile).tap {
-            configureEach {
-                //增加一些编译选项
-                //options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
-            }
-        }
+    configurations.all {
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+        exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
     }
 }
 
 tasks.register('clean', Delete) {
-    println("********** clean build **********")
-    println("delete project dir: " + rootProject.buildDir)
-    rootProject.buildDir.deleteDir()
-    def dir = new File(new File(".").getAbsolutePath())
-    println("root dir: " + dir.getAbsolutePath())
-    dir.eachDirRecurse {
-        dir2 ->
-            dir2.eachDirMatch(~/build/) {
-                directory ->
-                    println("delete child dir:" + directory)
-                    directory.deleteDir()
-            }
-    }
+    delete rootProject.layout.buildDirectory
+    subprojects.forEach { delete it.layout.buildDirectory }
 }

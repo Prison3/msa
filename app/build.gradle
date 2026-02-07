@@ -16,14 +16,14 @@ plugins {
 }
 
 dependencies {
-    implementation project(':library')
+    implementation project(':core')
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.7.1'
 }
 
 android {
     namespace 'com.android.msa'
-    compileSdk 36
+    compileSdk rootProject.ext.compileSdk
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -35,8 +35,8 @@ android {
     }
 
     defaultConfig {
-        minSdk 21
-        targetSdk 33
+        minSdk rootProject.ext.minSdk
+        targetSdk rootProject.ext.targetSdk
         //应用的实际包名
         applicationId "com.android.msa"
         // 配合 productFlavors 节点按不同维度打包

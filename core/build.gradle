@@ -15,7 +15,11 @@ apply plugin: 'com.android.library'
 
 android {
     namespace 'com.android.msa'
-    compileSdk 36
+    compileSdk rootProject.ext.compileSdk
+
+    buildFeatures {
+        aidl true
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -23,14 +27,9 @@ android {
     }
 
     defaultConfig {
-        minSdk 21
-        targetSdk 34
+        minSdk rootProject.ext.minSdk
+        targetSdk rootProject.ext.targetSdk
     }
-}
-
-repositories {
-    maven { url 'https://developer.huawei.com/repo' }
-    maven { url 'https://developer.hihonor.com/repo' }
 }
 
 dependencies {

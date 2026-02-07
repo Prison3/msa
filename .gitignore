@@ -1,112 +1,71 @@
-# Miscellaneous
-**/*.class
-**/*.lock
-**/*.log
-**/*.pyc
-**/*.swp
-**/.atom/
-**/.buildlog/
-**/.history
-**/.svn/
-**/.git-rewrite/
-**/.thumbs.db
-
-# IntelliJ related (Intellij IDEA, Android Studio, etc.)
-**/*.iml
-**/*.ipr
-**/*.iws
-**/build
-**/local.properties
-**/.idea/*
-!**/.idea/.name
-!**/.idea/codeStyles
-!**/.idea/copyright
-
-# Android related
-**/android/**/gradle-wrapper.jar
-**/android/.gradle
-**/android/captures/
-!**/android/gradlew
-!**/android/gradlew.bat
-**/android/local.properties
-**/proguard
-**/resource_mapping.txt
-**/gen
-**/debug
-**/release
-**/*.apk
-!**/demo.apk
-**/归档
-
-# NDK related
-**/.externalNativeBuild
-**/.cxx
-
-# Gradle
-**/.gradle
-**/gradle-app.setting
-**/.gradletasknamecache
-!**/gradle/wrapper/**
-
-# VS/VS Code
-**/.vs
-**/.suo
-**/.vscode
-!**/.vscode/*.json
-**/.project
-**/.classpath
-**/.settings
-
-# Flutter/Dart/Pub related
-**/doc/api/
-**/.dart_tool/
-**/.flutter-plugins
-**/.flutter-plugins-dependencies
-**/.packages
-**/.pub-cache/
-**/.pub/
+# Built and generated
+/build/
 **/build/
-**/lib/generated
-**/lib/generated_plugin_registrant.dart
-**/android/**/GeneratedPluginRegistrant.java
+*.apk
+*.aar
+*.dex
+*.class
+*.log
+*.lock
+*.pyc
+*.swp
+*~
+.DS_Store
+Thumbs.db
 
-# iOS/XCode related
-**/.DS_Store
-**/ios/**/*.mode1v3
-**/ios/**/*.mode2v3
-**/ios/**/*.moved-aside
-**/ios/**/*.pbxuser
-**/ios/**/*.perspectivev3
-**/ios/**/*sync/
-**/ios/**/.sconsign.dblite
-**/ios/**/.tags*
-**/ios/**/.vagrant/
-**/ios/**/DerivedData/
-**/ios/**/Icon?
-**/ios/**/Pods/
-**/ios/**/.symlinks/
-**/ios/**/profile
-**/ios/**/xcuserdata
-**/ios/.generated/
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Generated.xcconfig
-**/ios/Flutter/app.flx
-**/ios/Flutter/app.zip
-**/ios/Flutter/flutter_assets/
-**/ios/ServiceDefinitions.json
-**/ios/Runner/GeneratedPluginRegistrant.*
-**/ios/Flutter/flutter_export_environment.sh
-!**/ios/**/default.mode1v3
-!**/ios/**/default.mode2v3
-!**/ios/**/default.pbxuser
-!**/ios/**/default.perspectivev3
-!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
+# Local config (machine-specific, do not commit)
+local.properties
+*.local
 
-# Node related
-**/node_modules
-**/dist
-**/package-lock.json
-**/npm-debug.log*
-**/yarn-debug.log*
-**/yarn-error.log*
+# Gradle (gradle/wrapper/ 保留提交)
+.gradle/
+**/.gradle/
+gradle-app.setting
+.gradletasknamecache
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+# Keep useful IDE config
+!.idea/.name
+!.idea/codeStyles/
+!.idea/copyright/
+!.idea/codeStyleConfig.xml
+
+# Android build outputs
+**/captures/
+**/gen/
+**/out/
+**/release/
+**/debug/
+**/proguard/
+**/resource_mapping.txt
+.externalNativeBuild/
+.cxx/
+
+# Signing (do not commit release keystores)
+*.jks
+*.keystore
+# Uncomment if you don't want to track debug.keystore
+# **/debug.keystore
+
+# Kotlin
+*.kotlin_module
+
+# Version control
+.svn/
+.git-rewrite/
+
+# VS Code (optional)
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Misc
+**/归档
+.history/

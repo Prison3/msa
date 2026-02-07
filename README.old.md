@@ -305,3 +305,7 @@ See the Mulan PSL v2 for more details.
 
 支持开源，除了 Intellij IDEA Community / PyCharm  Community 和 EAP 版本可免费使用，也可通过 [申请开源开发许可证](https://www.jetbrains.com/shop/eform/opensource) 来免费使用正版的 [JetBrains 全家桶开发工具](https://www.jetbrains.com.cn/products/)，尤其是 Intellij IDEA Ultimate 版本很强大。
 
+
+# 说明
+
+逆向分析还原的[手机厂商开放匿名设备标识符获取接口(AIDL)](https://github.com/gzu-liyujiang/Android_CN_OAID/tree/master/aidl)。
