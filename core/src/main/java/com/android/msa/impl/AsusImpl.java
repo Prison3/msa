@@ -19,10 +19,10 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import repeackage.com.asus.msa.SupplementaryDID.IDidAidlInterface;
 
@@ -30,7 +30,7 @@ import repeackage.com.asus.msa.SupplementaryDID.IDidAidlInterface;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class AsusImpl implements IOAID {
+class AsusImpl implements IMsa {
     private final Context context;
 
     public AsusImpl(Context context) {
@@ -46,13 +46,13 @@ class AsusImpl implements IOAID {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.asus.msa.SupplementaryDID", 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -61,13 +61,13 @@ class AsusImpl implements IOAID {
         intent.setComponent(componentName);
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 IDidAidlInterface anInterface = IDidAidlInterface.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new OAIDException("IDidAidlInterface is null");
+                    throw new MsaException("IDidAidlInterface is null");
                 }
                 if (!anInterface.isSupport()) {
-                    throw new OAIDException("IDidAidlInterface#isSupport return false");
+                    throw new MsaException("IDidAidlInterface#isSupport return false");
                 }
                 return anInterface.getOAID();
             }

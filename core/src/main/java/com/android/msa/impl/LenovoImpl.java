@@ -18,10 +18,10 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import repeackage.com.zui.deviceidservice.IDeviceidInterface;
 
@@ -31,7 +31,7 @@ import repeackage.com.zui.deviceidservice.IDeviceidInterface;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class LenovoImpl implements IOAID {
+class LenovoImpl implements IMsa {
     private final Context context;
 
     public LenovoImpl(Context context) {
@@ -47,13 +47,13 @@ class LenovoImpl implements IOAID {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.zui.deviceidservice", 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -61,13 +61,13 @@ class LenovoImpl implements IOAID {
         intent.setClassName("com.zui.deviceidservice", "com.zui.deviceidservice.DeviceidService");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 IDeviceidInterface anInterface = IDeviceidInterface.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new OAIDException("IDeviceidInterface is null");
+                    throw new MsaException("IDeviceidInterface is null");
                 }
                 if (!anInterface.isSupport()) {
-                    throw new OAIDException("IDeviceidInterface#isSupport return false");
+                    throw new MsaException("IDeviceidInterface#isSupport return false");
                 }
                 return anInterface.getOAID();
             }

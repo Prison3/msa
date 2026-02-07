@@ -19,10 +19,10 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import repeackage.com.google.android.gms.ads.identifier.internal.IAdvertisingIdService;
 
@@ -36,7 +36,7 @@ import repeackage.com.google.android.gms.ads.identifier.internal.IAdvertisingIdS
  * @author 贵州山野羡民（1032694760@qq.com）
  * @since 2021/5/14 2:37
  */
-class GmsImpl implements IOAID {
+class GmsImpl implements IMsa {
     private final Context context;
 
     public GmsImpl(Context context) {
@@ -52,13 +52,13 @@ class GmsImpl implements IOAID {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.google.android.gms", 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -66,12 +66,12 @@ class GmsImpl implements IOAID {
         intent.setPackage("com.google.android.gms");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
                 if (anInterface.isLimitAdTrackingEnabled(true)) {
-                    OAIDLog.print("User has disabled advertising identifier");
+                    Logger.print("User has disabled advertising identifier");
                     // 从2022年开始，当isLimitAdTrackingEnabled()为true时，无论应用的目标SDK级别如何，getId()的返回值都是00000000-0000-0000-0000-000000000000
-                    throw new OAIDException("AAID acquire failed");
+                    throw new MsaException("AAID acquire failed");
                 }
                 return anInterface.getId();
             }

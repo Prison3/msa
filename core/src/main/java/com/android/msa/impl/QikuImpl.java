@@ -19,10 +19,10 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import repeackage.com.qiku.id.IOAIDInterface;
 import repeackage.com.qiku.id.QikuIdmanager;
@@ -31,7 +31,7 @@ import repeackage.com.qiku.id.QikuIdmanager;
  * @author 10cl
  * @since 2024/03/06
  */
-public class QikuImpl implements IOAID {
+public class QikuImpl implements IMsa {
     private final Context context;
     private boolean mUseQikuId = true;
 
@@ -53,13 +53,13 @@ public class QikuImpl implements IOAID {
                 return new QikuIdmanager().isSupported();
             }
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(IGetter getter) {
+    public void doGet(IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -68,10 +68,10 @@ public class QikuImpl implements IOAID {
             intent.setPackage("com.qiku.id");
             OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
                 @Override
-                public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+                public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                     IOAIDInterface anInterface = IOAIDInterface.Stub.asInterface(service);
                     if (anInterface == null) {
-                        throw new OAIDException("IOAIDInterface is null");
+                        throw new MsaException("IOAIDInterface is null");
                     }
                     return anInterface.getOAID();
                 }
@@ -80,11 +80,11 @@ public class QikuImpl implements IOAID {
             try {
                 String oaid = new QikuIdmanager().getOAID();
                 if (oaid == null || oaid.length() == 0) {
-                    throw new OAIDException("OAID/AAID acquire failed");
+                    throw new MsaException("OAID/AAID acquire failed");
                 }
-                getter.onOAIDGetComplete(oaid);
+                getter.onCompleted(oaid);
             } catch (Exception e) {
-                getter.onOAIDGetError(e);
+                getter.onError(e);
             }
         }
     }

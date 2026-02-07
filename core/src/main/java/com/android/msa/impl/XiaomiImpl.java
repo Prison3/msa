@@ -15,10 +15,10 @@ package com.android.msa.impl;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class XiaomiImpl implements IOAID {
+class XiaomiImpl implements IMsa {
     private final Context context;
     private Class<?> idProviderClass;
     private Object idProviderImpl;
@@ -42,7 +42,7 @@ class XiaomiImpl implements IOAID {
             idProviderClass = Class.forName("com.android.id.impl.IdProviderImpl");
             idProviderImpl = idProviderClass.newInstance();
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
         }
     }
 
@@ -52,23 +52,23 @@ class XiaomiImpl implements IOAID {
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
         if (idProviderClass == null || idProviderImpl == null) {
-            getter.onOAIDGetError(new OAIDException("Xiaomi IdProvider not exists"));
+            getter.onOAIDGetError(new MsaException("Xiaomi IdProvider not exists"));
             return;
         }
         try {
             String oaid = getOAID();
             if (oaid == null || oaid.length() == 0) {
-                throw new OAIDException("OAID query failed");
+                throw new MsaException("OAID query failed");
             }
-            OAIDLog.print("OAID query success: " + oaid);
+            Logger.print("OAID query success: " + oaid);
             getter.onOAIDGetComplete(oaid);
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             getter.onOAIDGetError(e);
         }
     }

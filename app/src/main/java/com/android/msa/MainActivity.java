@@ -28,8 +28,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.msa.DeviceID;
 import com.android.msa.DeviceIdentifier;
-import com.android.msa.IGetter;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.Logger;
 
 /**
  * @author 大定府羡民（1032694760@qq.com）
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         } else if (id == R.id.btn_get_by_gms) {
             DeviceID.getByGms(this, new ToastGetter(this));
         } else {
-            OAIDLog.print("\"if ... else if\" constructs should end with \"else\" clauses.");
+            Logger.print("\"if ... else if\" constructs should end with \"else\" clauses.");
         }
     }
 
@@ -126,16 +126,16 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         builder.append(DeviceIdentifier.getOAID(this));
         builder.append("\n");
         // 获取OAID/AAID，异步回调
-        DeviceID.getOAID(this, new IGetter() {
+        DeviceID.getOAID(this, new IMsaGetter() {
             @Override
-            public void onOAIDGetComplete(String result) {
+            public void onCompleted(String result) {
                 // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
                 builder.append("OAID/AAID: ").append(result).append("\n");
                 tvDeviceIdResult.setText(builder);
             }
 
             @Override
-            public void onOAIDGetError(Exception error) {
+            public void onError(Exception error) {
                 // 获取OAID/AAID失败
                 builder.append("OAID/AAID: ").append(error).append("\n");
                 tvDeviceIdResult.setText(builder);
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         Toast.makeText(this, result, Toast.LENGTH_LONG).show();
     }
 
-    private static class ToastGetter implements IGetter {
+    private static class ToastGetter implements IMsaGetter {
         private final MainActivity activity;
 
         private ToastGetter(MainActivity activity) {
@@ -174,12 +174,12 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         }
 
         @Override
-        public void onOAIDGetComplete(String result) {
+        public void onCompleted(String result) {
             activity.showToast("OAID: " + result);
         }
 
         @Override
-        public void onOAIDGetError(Exception error) {
+        public void onError(Exception error) {
             activity.showToast("OAID: " + error);
         }
     }

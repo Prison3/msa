@@ -20,9 +20,9 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import repeackage.com.oplus.stdid.IStdID;
 
@@ -51,13 +51,13 @@ public class OppoExtImpl extends OppoImpl {
             PackageInfo pi = context.getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(IGetter getter) {
+    public void doGet(IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -65,22 +65,22 @@ public class OppoExtImpl extends OppoImpl {
         intent.setComponent(new ComponentName(PACKAGE_NAME, CLASS_NAME));
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 try {
                     return realGetOUID(service);
-                } catch (OAIDException | RemoteException e) {
+                } catch (MsaException | RemoteException e) {
                     throw e;
                 } catch (Exception e) {
-                    throw new OAIDException(e);
+                    throw new MsaException(e);
                 }
             }
         });
     }
 
-    protected String getSerId(IBinder service, String pkgName, String sign) throws RemoteException, OAIDException {
+    protected String getSerId(IBinder service, String pkgName, String sign) throws RemoteException, MsaException {
         IStdID anInterface = IStdID.Stub.asInterface(service);
         if (anInterface == null) {
-            throw new OAIDException("IStdID is null");
+            throw new MsaException("IStdID is null");
         }
         return anInterface.getSerID(pkgName, sign, "OUID");
     }

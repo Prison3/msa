@@ -19,10 +19,10 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import repeackage.com.android.creator.IdsSupplier;
 
@@ -30,7 +30,7 @@ import repeackage.com.android.creator.IdsSupplier;
  * @author 贵州山野羡民（1032694760@qq.com）
  * @since 2021/8/26 17:09
  */
-public class FreemeImpl implements IOAID {
+public class FreemeImpl implements IMsa {
     private final Context context;
 
     public FreemeImpl(Context context) {
@@ -46,13 +46,13 @@ public class FreemeImpl implements IOAID {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.android.creator", 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -60,10 +60,10 @@ public class FreemeImpl implements IOAID {
         intent.setPackage("com.android.creator");
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 IdsSupplier anInterface = IdsSupplier.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new OAIDException("IdsSupplier is null");
+                    throw new MsaException("IdsSupplier is null");
                 }
                 return anInterface.getOAID();
             }

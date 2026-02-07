@@ -23,10 +23,10 @@ import android.content.pm.Signature;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -39,7 +39,7 @@ import repeackage.com.heytap.openid.IOpenID;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class OppoImpl implements IOAID {
+class OppoImpl implements IMsa {
     private final Context context;
     private String sign;
 
@@ -60,13 +60,13 @@ class OppoImpl implements IOAID {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.heytap.openid", 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -74,13 +74,13 @@ class OppoImpl implements IOAID {
         intent.setComponent(new ComponentName("com.heytap.openid", "com.heytap.openid.IdentifyService"));
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 try {
                     return realGetOUID(service);
-                } catch (OAIDException | RemoteException e) {
+                } catch (MsaException | RemoteException e) {
                     throw e;
                 } catch (Exception e) {
-                    throw new OAIDException(e);
+                    throw new MsaException(e);
                 }
             }
         });
@@ -88,7 +88,7 @@ class OppoImpl implements IOAID {
 
     @SuppressLint("PackageManagerGetSignatures")
     protected String realGetOUID(IBinder service) throws PackageManager.NameNotFoundException,
-            NoSuchAlgorithmException, RemoteException, OAIDException {
+            NoSuchAlgorithmException, RemoteException, MsaException {
         String pkgName = context.getPackageName();
         if (sign == null) {
             Signature[] signatures = context.getPackageManager().getPackageInfo(pkgName,
@@ -106,10 +106,10 @@ class OppoImpl implements IOAID {
         return getSerId(service, pkgName, sign);
     }
 
-    protected String getSerId(IBinder service, String pkgName, String sign) throws RemoteException, OAIDException {
+    protected String getSerId(IBinder service, String pkgName, String sign) throws RemoteException, MsaException {
         IOpenID anInterface = IOpenID.Stub.asInterface(service);
         if (anInterface == null) {
-            throw new OAIDException("IOpenID is null");
+            throw new MsaException("IOpenID is null");
         }
         return anInterface.getSerID(pkgName, sign, "OUID");
     }

@@ -21,10 +21,10 @@ import android.content.pm.PackageInfo;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import repeackage.com.coolpad.deviceidsupport.IDeviceIdManager;
 
@@ -32,7 +32,7 @@ import repeackage.com.coolpad.deviceidsupport.IDeviceIdManager;
  * @author 贵州山野羡民（1032694760@qq.com）
  * @since 2021/8/26 15:11
  */
-public class CoolpadImpl implements IOAID {
+public class CoolpadImpl implements IMsa {
     private final Context context;
 
     public CoolpadImpl(Context context) {
@@ -52,13 +52,13 @@ public class CoolpadImpl implements IOAID {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.coolpad.deviceidsupport", 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -66,10 +66,10 @@ public class CoolpadImpl implements IOAID {
         intent.setComponent(new ComponentName("com.coolpad.deviceidsupport", "com.coolpad.deviceidsupport.DeviceIdService"));
         OAIDService.bind(context, intent, getter, new OAIDService.RemoteCaller() {
             @Override
-            public String callRemoteInterface(IBinder service) throws OAIDException, RemoteException {
+            public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 IDeviceIdManager anInterface = IDeviceIdManager.Stub.asInterface(service);
                 if (anInterface == null) {
-                    throw new OAIDException("IDeviceIdManager is null");
+                    throw new MsaException("IDeviceIdManager is null");
                 }
                 return anInterface.getOAID(context.getPackageName());
             }

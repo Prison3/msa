@@ -21,9 +21,9 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import com.android.msa.IGetter;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 /**
  * 绑定远程的 OAID 服务
@@ -33,14 +33,14 @@ import com.android.msa.OAIDLog;
  */
 class OAIDService implements ServiceConnection {
     private final Context context;
-    private final IGetter getter;
+    private final IMsaGetter getter;
     private final RemoteCaller caller;
 
-    public static void bind(Context context, Intent intent, IGetter getter, RemoteCaller caller) {
+    public static void bind(Context context, Intent intent, IMsaGetter getter, RemoteCaller caller) {
         new OAIDService(context, getter, caller).bind(intent);
     }
 
-    private OAIDService(Context context, IGetter getter, RemoteCaller caller) {
+    private OAIDService(Context context, IMsaGetter getter, RemoteCaller caller) {
         if (context instanceof Application) {
             this.context = context;
         } else {
@@ -54,46 +54,46 @@ class OAIDService implements ServiceConnection {
         try {
             boolean ret = context.bindService(intent, this, Context.BIND_AUTO_CREATE);
             if (!ret) {
-                throw new OAIDException("Service binding failed");
+                throw new MsaException("Service binding failed");
             }
-            OAIDLog.print("Service has been bound: " + intent);
+            Logger.print("Service has been bound: " + intent);
         } catch (Exception e) {
-            getter.onOAIDGetError(e);
+            getter.onError(e);
         }
     }
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        OAIDLog.print("Service has been connected: " + name.getClassName());
+        Logger.print("Service has been connected: " + name.getClassName());
         try {
             String oaid = caller.callRemoteInterface(service);
             if (oaid == null || oaid.length() == 0) {
-                throw new OAIDException("OAID/AAID acquire failed");
+                throw new MsaException("OAID/AAID acquire failed");
             }
-            OAIDLog.print("OAID/AAID acquire success: " + oaid);
-            getter.onOAIDGetComplete(oaid);
+            Logger.print("OAID/AAID acquire success: " + oaid);
+            getter.onCompleted(oaid);
         } catch (Exception e) {
-            OAIDLog.print(e);
-            getter.onOAIDGetError(e);
+            Logger.print(e);
+            getter.onError(e);
         } finally {
             try {
                 context.unbindService(this);
-                OAIDLog.print("Service has been unbound: " + name.getClassName());
+                Logger.print("Service has been unbound: " + name.getClassName());
             } catch (Exception e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             }
         }
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        OAIDLog.print("Service has been disconnected: " + name.getClassName());
+        Logger.print("Service has been disconnected: " + name.getClassName());
     }
 
     @FunctionalInterface
     public interface RemoteCaller {
 
-        String callRemoteInterface(IBinder binder) throws OAIDException, RemoteException;
+        String callRemoteInterface(IBinder binder) throws MsaException, RemoteException;
 
     }
 

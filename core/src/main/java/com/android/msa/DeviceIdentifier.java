@@ -168,14 +168,14 @@ public final class DeviceIdentifier {
                 if (TextUtils.isEmpty(oaid)) {
                     oaid = DeviceID.getOAID();
                     if (oaid == null || oaid.length() == 0) {
-                        DeviceID.getOAID(context, new IGetter() {
+                        DeviceID.getOAID(context, new IMsaGetter() {
                             @Override
-                            public void onOAIDGetComplete(String result) {
+                            public void onCompleted(String result) {
                                 oaid = result;
                             }
 
                             @Override
-                            public void onOAIDGetError(Exception error) {
+                            public void onError(Exception error) {
                                 oaid = "";
                             }
                         });

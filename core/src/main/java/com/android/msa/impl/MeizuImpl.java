@@ -18,10 +18,10 @@ import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import java.util.Objects;
 
@@ -29,7 +29,7 @@ import java.util.Objects;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class MeizuImpl implements IOAID {
+class MeizuImpl implements IMsa {
     private final Context context;
 
     public MeizuImpl(Context context) {
@@ -45,13 +45,13 @@ class MeizuImpl implements IOAID {
             ProviderInfo pi = context.getPackageManager().resolveContentProvider("com.meizu.flyme.openidsdk", 0);
             return pi != null;
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -62,13 +62,13 @@ class MeizuImpl implements IOAID {
             @SuppressLint("Range")
             String oaid = cursor.getString(cursor.getColumnIndex("value"));
             if (oaid == null || oaid.length() == 0) {
-                throw new OAIDException("OAID query failed");
+                throw new MsaException("OAID query failed");
             }
-            OAIDLog.print("OAID query success: " + oaid);
-            getter.onOAIDGetComplete(oaid);
+            Logger.print("OAID query success: " + oaid);
+            getter.onCompleted(oaid);
         } catch (Exception e) {
-            OAIDLog.print(e);
-            getter.onOAIDGetError(e);
+            Logger.print(e);
+            getter.onError(e);
         }
     }
 

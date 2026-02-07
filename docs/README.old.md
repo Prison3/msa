@@ -132,7 +132,7 @@ dependencies {
         // 获取OAID或AAID，同步调用
         DeviceIdentifier.getOAID(this);
         // 获取OAID或AAID，异步回调
-        DeviceID.getOAID(this, new IGetter() {
+        DeviceID.getOAID(this, new IMsaGetter() {
             @Override
             public void onOAIDGetComplete(String result) {
                 // 不同厂商的OAID/AAID格式是不一样的，可进行MD5、SHA1之类的哈希运算统一
@@ -144,11 +144,11 @@ dependencies {
             }
         });
         // 异步获取手机厂商专有的广告标识符，异步回调
-        DeviceID.getByManufacturer(this, new IGetter() { ... });
+        DeviceID.getByManufacturer(this, new IMsaGetter() { ... });
         // 异步获取移动安全联盟通用的广告标识符，异步回调
-        DeviceID.getByMsa(this, new IGetter() { ... });
+        DeviceID.getByMsa(this, new IMsaGetter() { ... });
         // 获取谷歌商店服务通用的广告标识符，异步回调
-        DeviceID.getByGms(this, new IGetter() { ... });
+        DeviceID.getByGms(this, new IMsaGetter() { ... });
         // 获取画布指纹
         DeviceIdentifier.getCanvasFingerprint();
 ```

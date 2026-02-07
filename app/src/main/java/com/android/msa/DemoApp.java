@@ -20,7 +20,7 @@ import androidx.multidex.MultiDex;
 
 import com.android.msa.DeviceIdentifier;
 import com.android.msa.IRegisterCallback;
-import com.android.msa.OAIDLog;
+import com.android.msa.Logger;
 
 /**
  * @author 大定府羡民（1032694760@qq.com）
@@ -31,7 +31,7 @@ public class DemoApp extends Application {
 
     static {
         // 开启日志打印，默认是关闭的，启动本应用会打印如下类似的日志：
-        OAIDLog.enable();
+        Logger.enable();
     }
 
     @Override

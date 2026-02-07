@@ -20,15 +20,15 @@ import android.text.TextUtils;
 import java.lang.reflect.Method;
 
 /**
- * ROM识别工具类
+ * ROM/机型识别工具类
  *
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/29
  */
 @SuppressWarnings("All")
-public final class OAIDRom {
+public final class RomDetector {
 
-    private OAIDRom() {
+    private RomDetector() {
         super();
     }
 
@@ -39,7 +39,7 @@ public final class OAIDRom {
             Method method = clazz.getMethod("get", new Class<?>[]{String.class, String.class});
             res = (String) method.invoke(clazz, new Object[]{key, defValue});
         } catch (Throwable e) {
-            OAIDLog.print("System property invoke error: " + e);
+            Logger.print("System property invoke error: " + e);
         }
         if (res == null) {
             res = "";

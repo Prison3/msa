@@ -16,10 +16,10 @@ package com.android.msa.impl;
 import android.app.KeyguardManager;
 import android.content.Context;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 import java.util.Objects;
 
@@ -27,7 +27,7 @@ import java.util.Objects;
  * @author 贵州山野羡民（1032694760@qq.com）
  * @since 2021/8/26 16:22
  */
-public class CooseaImpl implements IOAID {
+public class CooseaImpl implements IMsa {
     private final Context context;
     private final KeyguardManager keyguardManager;
 
@@ -48,30 +48,30 @@ public class CooseaImpl implements IOAID {
             Object obj = keyguardManager.getClass().getDeclaredMethod("isSupported").invoke(keyguardManager);
             return (Boolean) Objects.requireNonNull(obj);
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             return false;
         }
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
         if (keyguardManager == null) {
-            getter.onOAIDGetError(new OAIDException("KeyguardManager not found"));
+            getter.onError(new MsaException("KeyguardManager not found"));
             return;
         }
         try {
             Object obj = keyguardManager.getClass().getDeclaredMethod("obtainOaid").invoke(keyguardManager);
             if (obj == null) {
-                throw new OAIDException("OAID obtain failed");
+                throw new MsaException("OAID obtain failed");
             }
             String oaid = obj.toString();
-            OAIDLog.print("OAID obtain success: " + oaid);
-            getter.onOAIDGetComplete(oaid);
+            Logger.print("OAID obtain success: " + oaid);
+            getter.onCompleted(oaid);
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
         }
     }
 

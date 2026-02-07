@@ -17,10 +17,10 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 import com.huawei.hms.ads.identifier.AdvertisingIdClient;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.concurrent.Executors;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class HuaweiImpl implements IOAID {
+class HuaweiImpl implements IMsa {
     private final Context context;
     private final Handler uiHandler = new Handler(Looper.getMainLooper());
 
@@ -60,13 +60,13 @@ class HuaweiImpl implements IOAID {
                 return true;
             }
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
         }
         return false;
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -78,42 +78,42 @@ class HuaweiImpl implements IOAID {
         });
     }
 
-    private void runOnSubThread(IGetter getter) {
+    private void runOnSubThread(IMsaGetter getter) {
         try {
             // 获取OAID信息（SDK方式）
             // 参阅 https://developer.huawei.com/consumer/cn/doc/HMSCore-Guides/identifier-service-obtaining-oaid-sdk-0000001050064988
             // 华为官方开发者文档提到“调用getAdvertisingIdInfo接口，获取OAID信息，不要在主线程中调用该方法。”
             final AdvertisingIdClient.Info info = AdvertisingIdClient.getAdvertisingIdInfo(context);
             if (info == null) {
-                postOnMainThread(getter, new OAIDException("Advertising identifier info is null"));
+                postOnMainThread(getter, new MsaException("Advertising identifier info is null"));
                 return;
             }
             if (info.isLimitAdTrackingEnabled()) {
                 // 实测在系统设置中关闭了广告标识符，将获取到固定的一大堆0
-                postOnMainThread(getter, new OAIDException("User has disabled advertising identifier"));
+                postOnMainThread(getter, new MsaException("User has disabled advertising identifier"));
                 return;
             }
             postOnMainThread(getter, info.getId());
         } catch (IOException e) {
-            OAIDLog.print(e);
-            postOnMainThread(getter, new OAIDException(e));
+            Logger.print(e);
+            postOnMainThread(getter, new MsaException(e));
         }
     }
 
-    private void postOnMainThread(final IGetter getter, final String oaid) {
+    private void postOnMainThread(final IMsaGetter getter, final String oaid) {
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
-                getter.onOAIDGetComplete(oaid);
+                getter.onCompleted(oaid);
             }
         });
     }
 
-    private void postOnMainThread(final IGetter getter, final OAIDException e) {
+    private void postOnMainThread(final IMsaGetter getter, final MsaException e) {
         uiHandler.post(new Runnable() {
             @Override
             public void run() {
-                getter.onOAIDGetError(e);
+                getter.onError(e);
             }
         });
     }

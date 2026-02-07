@@ -21,11 +21,11 @@ import android.util.Log;
  * @author 贵州山魈羡民 (1032694760@qq.com)
  * @since 2021/3/26 21:34
  */
-public final class OAIDLog {
+public final class Logger {
     private static final String TAG = "OAID";
     private static boolean enable = false;
 
-    private OAIDLog() {
+    private Logger() {
         super();
     }
 

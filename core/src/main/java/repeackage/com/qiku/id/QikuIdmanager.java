@@ -18,7 +18,7 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-import com.android.msa.OAIDLog;
+import com.android.msa.Logger;
 
 import java.lang.reflect.Method;
 
@@ -51,8 +51,8 @@ public final class QikuIdmanager {
                 mIBinder = (IBinder) method_getService.invoke(null, "qikuid");
             }
         } catch (Throwable e) {
-            OAIDLog.print("Failure get qikuid service");
-            OAIDLog.print(e);
+            Logger.print("Failure get qikuid service");
+            Logger.print(e);
         }
     }
 
@@ -65,7 +65,7 @@ public final class QikuIdmanager {
                 int result = reply.readInt();
                 return result == 1;
             } catch (RemoteException e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -82,7 +82,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_UDID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -99,7 +99,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_OAID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -116,7 +116,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_VAID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -133,7 +133,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_AAID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -149,7 +149,7 @@ public final class QikuIdmanager {
             try {
                 mIBinder.transact(CODE_SHUTDOWN, data, reply, 0);
             } catch (RemoteException e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -168,7 +168,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_LIMIT_READ_OAID, data, reply, 0);
                 return reply.readInt() != 0;
             } catch (RemoteException e) {
-                OAIDLog.print(e);
+                Logger.print(e);
             } finally {
                 data.recycle();
                 reply.recycle();

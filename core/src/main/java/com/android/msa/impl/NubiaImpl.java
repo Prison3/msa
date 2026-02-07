@@ -19,16 +19,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
 
 /**
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class NubiaImpl implements IOAID {
+class NubiaImpl implements IMsa {
     private final Context context;
 
     public NubiaImpl(Context context) {
@@ -42,14 +42,14 @@ class NubiaImpl implements IOAID {
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
         if (!supported()) {
             String message = "Only supports Android 10.0 and above for Nubia";
-            OAIDLog.print(message);
-            getter.onOAIDGetError(new OAIDException(message));
+            Logger.print(message);
+            getter.onError(new MsaException(message));
             return;
         }
         String oaid = null;
@@ -66,19 +66,19 @@ class NubiaImpl implements IOAID {
                 client.release();
             }
             if (bundle == null) {
-                throw new OAIDException("OAID query failed: bundle is null");
+                throw new MsaException("OAID query failed: bundle is null");
             }
             if (bundle.getInt("code", -1) == 0) {
                 oaid = bundle.getString("id");
             }
             if (oaid == null || oaid.length() == 0) {
-                throw new OAIDException("OAID query failed: " + bundle.getString("message"));
+                throw new MsaException("OAID query failed: " + bundle.getString("message"));
             }
-            OAIDLog.print("OAID query success: " + oaid);
-            getter.onOAIDGetComplete(oaid);
+            Logger.print("OAID query success: " + oaid);
+            getter.onCompleted(oaid);
         } catch (Exception e) {
-            OAIDLog.print(e);
-            getter.onOAIDGetError(e);
+            Logger.print(e);
+            getter.onError(e);
         }
     }
 

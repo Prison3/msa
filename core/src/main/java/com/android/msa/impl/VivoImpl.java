@@ -17,11 +17,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
-import com.android.msa.OAIDLog;
-import com.android.msa.OAIDRom;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
+import com.android.msa.Logger;
+import com.android.msa.RomDetector;
 
 import java.util.Objects;
 
@@ -32,7 +32,7 @@ import java.util.Objects;
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class VivoImpl implements IOAID {
+class VivoImpl implements IMsa {
     private final Context context;
 
     public VivoImpl(Context context) {
@@ -44,12 +44,12 @@ class VivoImpl implements IOAID {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             return false;
         }
-        return OAIDRom.sysProperty("persist.sys.identifierid.supported", "0").equals("1")
-                || OAIDRom.sysProperty("persist.sys.identifierid", "0").equals("1");
+        return RomDetector.sysProperty("persist.sys.identifierid.supported", "0").equals("1")
+                || RomDetector.sysProperty("persist.sys.identifierid", "0").equals("1");
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (context == null || getter == null) {
             return;
         }
@@ -60,12 +60,12 @@ class VivoImpl implements IOAID {
             int columnIndex = cursor.getColumnIndex("value");
             String oaid = cursor.getString(columnIndex);
             if (oaid == null || oaid.length() == 0) {
-                throw new OAIDException("OAID query failed");
+                throw new MsaException("OAID query failed");
             }
-            OAIDLog.print("OAID query success: " + oaid);
+            Logger.print("OAID query success: " + oaid);
             getter.onOAIDGetComplete(oaid);
         } catch (Exception e) {
-            OAIDLog.print(e);
+            Logger.print(e);
             getter.onOAIDGetError(e);
         }
     }

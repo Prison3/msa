@@ -12,15 +12,15 @@
  */
 package com.android.msa.impl;
 
-import com.android.msa.IGetter;
-import com.android.msa.IOAID;
-import com.android.msa.OAIDException;
+import com.android.msa.IMsaGetter;
+import com.android.msa.IMsa;
+import com.android.msa.MsaException;
 
 /**
  * @author 大定府羡民（1032694760@qq.com）
  * @since 2020/5/30
  */
-class DefaultImpl implements IOAID {
+class DefaultImpl implements IMsa {
 
     @Override
     public boolean supported() {
@@ -28,11 +28,11 @@ class DefaultImpl implements IOAID {
     }
 
     @Override
-    public void doGet(final IGetter getter) {
+    public void doGet(final IMsaGetter getter) {
         if (getter == null) {
             return;
         }
-        getter.onOAIDGetError(new OAIDException("Unsupported"));
+        getter.onError(new MsaException("Unsupported"));
     }
 
 }
