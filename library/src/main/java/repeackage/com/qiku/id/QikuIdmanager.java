@@ -18,7 +18,7 @@ import android.os.IBinder;
 import android.os.Parcel;
 import android.os.RemoteException;
 
-import com.github.gzuliyujiang.oaid.OAIDLog;
+import com.android.msa.OAIDLog;
 
 import java.lang.reflect.Method;
 
