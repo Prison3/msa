@@ -11,11 +11,16 @@
  * See the Mulan PSL v2 for more details.
  */
 
-apply from: "${rootDir}/gradle/library.gradle"
-apply from: "${rootDir}/gradle/publish.gradle"
+apply plugin: 'com.android.library'
 
 android {
     namespace 'com.github.gzuliyujiang.oaid'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 34
+    }
 }
 
 repositories {

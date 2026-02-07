@@ -11,18 +11,27 @@
  * See the Mulan PSL v2 for more details.
  */
 
-apply from: "${rootDir}/gradle/app.gradle"
+plugins {
+    id 'com.android.application'
+}
 
 dependencies {
     implementation project(':library')
-    implementation androidxLibrary.multidex
-    implementation androidxLibrary.appcompat
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 }
 
 android {
     namespace 'com.github.gzuliyujiang.fallback'
+    compileSdk 34
+
+    buildFeatures {
+        buildConfig true
+    }
 
     defaultConfig {
+        minSdk 21
+        targetSdk 34
         //应用的实际包名
         applicationId "com.github.gzuliyujiang.demo.oaid"
         // 配合 productFlavors 节点按不同维度打包
