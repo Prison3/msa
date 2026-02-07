@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright (c) 2016-present. 贵州纳雍穿青人李裕江 and All Contributors.
+  ~
+  ~ The software is licensed under the Mulan PSL v2.
+  ~ You can use this software according to the terms and conditions of the Mulan PSL v2.
+  ~ You may obtain a copy of Mulan PSL v2 at:
+  ~     http://license.coscl.org.cn/MulanPSL2
+  ~ THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+  ~ PURPOSE.
+  ~ See the Mulan PSL v2 for more details.
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+    <uses-permission android:name="com.asus.msa.SupplementaryDID.ACCESS" />
+    <uses-permission android:name="freemme.permission.msa" />
+
+    <!-- Android 11+：https://developer.android.google.cn/about/versions/11/privacy/package-visibility?hl=zh-cn -->
+    <queries>
+        <!-- google -->
+        <package android:name="com.google.android.gms" />
+        <package android:name="com.android.vending" />
+        <!-- freeme -->
+        <package android:name="com.android.creator" />
+        <!-- zte -->
+        <package android:name="com.mdid.msa" />
+        <!-- samsung -->
+        <package android:name="com.samsung.android.deviceidservice" />
+        <!-- coolpad -->
+        <package android:name="com.coolpad.deviceidsupport" />
+        <!-- oppo -->
+        <package android:name="com.heytap.openid" />
+        <!-- huawei -->
+        <package android:name="com.huawei.hwid" />
+        <package android:name="com.huawei.hwid.tv" />
+        <package android:name="com.huawei.hms" />
+        <!-- asus -->
+        <package android:name="com.asus.msa.SupplementaryDID" />
+        <!-- lenovo -->
+        <package android:name="com.zui.deviceidservice" />
+        <!-- 360OS -->
+        <package android:name="com.qiku.id" />
+    </queries>
+
+</manifest>

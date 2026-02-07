@@ -1,0 +1,101 @@
+<!--
+  ~ Copyright (c) 2016-present. 贵州纳雍穿青人李裕江 and All Contributors.
+  ~
+  ~ The software is licensed under the Mulan PSL v2.
+  ~ You can use this software according to the terms and conditions of the Mulan PSL v2.
+  ~ You may obtain a copy of Mulan PSL v2 at:
+  ~     http://license.coscl.org.cn/MulanPSL2
+  ~ THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY OR FIT FOR A PARTICULAR
+  ~ PURPOSE.
+  ~ See the Mulan PSL v2 for more details.
+  -->
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_device_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:text=""
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_get_device_id_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="用法一：实时获取设备标识符"
+            android:textAllCaps="false"
+            android:textColor="#ffff0000"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btn_get_device_id_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="用法二：预先获取设备标识符"
+            android:textAllCaps="false"
+            android:textColor="#ff0000ff"
+            tools:ignore="HardcodedText" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/btn_get_by_manufacturer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="获取手机厂商专有的广告标识符"
+                android:textAllCaps="false"
+                android:textColor="#ffff00ff"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_get_by_msa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="获取移动安全联盟通用的广告标识符"
+                android:textAllCaps="false"
+                android:textColor="#ffff00ff"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/btn_get_by_gms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="获取谷歌商店服务通用的广告标识符"
+                android:textAllCaps="false"
+                android:textColor="#ffff00ff"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_device_id_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
