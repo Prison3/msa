@@ -57,7 +57,7 @@ class XiaomiImpl implements IMsa {
             return;
         }
         if (idProviderClass == null || idProviderImpl == null) {
-            getter.onOAIDGetError(new MsaException("Xiaomi IdProvider not exists"));
+            getter.onError(new MsaException("Xiaomi IdProvider not exists"));
             return;
         }
         try {
@@ -66,10 +66,10 @@ class XiaomiImpl implements IMsa {
                 throw new MsaException("OAID query failed");
             }
             Logger.print("OAID query success: " + oaid);
-            getter.onOAIDGetComplete(oaid);
+            getter.onCompleted(oaid);
         } catch (Exception e) {
             Logger.print(e);
-            getter.onOAIDGetError(e);
+            getter.onError(e);
         }
     }
 

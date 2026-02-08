@@ -63,10 +63,10 @@ class VivoImpl implements IMsa {
                 throw new MsaException("OAID query failed");
             }
             Logger.print("OAID query success: " + oaid);
-            getter.onOAIDGetComplete(oaid);
+            getter.onCompleted(oaid);
         } catch (Exception e) {
             Logger.print(e);
-            getter.onOAIDGetError(e);
+            getter.onError(e);
         }
     }
 
