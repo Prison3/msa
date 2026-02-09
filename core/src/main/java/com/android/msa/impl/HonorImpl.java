@@ -76,7 +76,7 @@ class HonorImpl implements IMsa {
             }
             postOnMainThread(getter, info.id);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Honor OAID query failed", e);
             postOnMainThread(getter, new MsaException(e));
         }
     }

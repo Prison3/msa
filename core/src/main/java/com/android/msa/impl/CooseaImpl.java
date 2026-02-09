@@ -48,7 +48,7 @@ public class CooseaImpl implements IMsa {
             Object obj = keyguardManager.getClass().getDeclaredMethod("isSupported").invoke(keyguardManager);
             return (Boolean) Objects.requireNonNull(obj);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Coosea OAID supported check failed", e);
             return false;
         }
     }
@@ -68,10 +68,10 @@ public class CooseaImpl implements IMsa {
                 throw new MsaException("OAID obtain failed");
             }
             String oaid = obj.toString();
-            Logger.print("OAID obtain success: " + oaid);
+            Logger.i("OAID obtain success: " + oaid);
             getter.onCompleted(oaid);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Coosea OAID obtain failed", e);
         }
     }
 

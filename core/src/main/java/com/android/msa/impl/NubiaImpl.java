@@ -48,7 +48,7 @@ class NubiaImpl implements IMsa {
         }
         if (!supported()) {
             String message = "Only supports Android 10.0 and above for Nubia";
-            Logger.print(message);
+            Logger.w(message);
             getter.onError(new MsaException(message));
             return;
         }
@@ -74,10 +74,10 @@ class NubiaImpl implements IMsa {
             if (oaid == null || oaid.length() == 0) {
                 throw new MsaException("OAID query failed: " + bundle.getString("message"));
             }
-            Logger.print("OAID query success: " + oaid);
+            Logger.i("OAID query success: " + oaid);
             getter.onCompleted(oaid);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Nubia OAID query failed", e);
             getter.onError(e);
         }
     }

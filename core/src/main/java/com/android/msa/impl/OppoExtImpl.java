@@ -51,7 +51,7 @@ public class OppoExtImpl extends OppoImpl {
             PackageInfo pi = context.getPackageManager().getPackageInfo(PACKAGE_NAME, 0);
             return pi != null;
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("OppoExt package check failed", e);
             return false;
         }
     }

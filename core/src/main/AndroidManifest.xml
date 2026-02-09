@@ -51,6 +51,8 @@
         <package android:name="com.zui.deviceidservice" />
         <!-- 360OS -->
         <package android:name="com.qiku.id" />
+        <!--Honor  -->
+        <package android:name="com.hihonor.id" />
     </queries>
 
 </manifest>

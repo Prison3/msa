@@ -110,7 +110,7 @@ public final class DeviceID {
         String uniqueID = getUniqueID(application);
         if (!TextUtils.isEmpty(uniqueID)) {
             Holder.INSTANCE.clientId = uniqueID;
-            Logger.print("Client id is IMEI/MEID: " + Holder.INSTANCE.clientId);
+            Logger.i("Client id is IMEI/MEID: " + Holder.INSTANCE.clientId);
             if (callback != null) {
                 callback.onComplete(uniqueID, null);
             }
@@ -129,7 +129,7 @@ public final class DeviceID {
                 }
                 Holder.INSTANCE.clientId = result;
                 Holder.INSTANCE.oaid = result;
-                Logger.print("Client id is OAID/AAID: " + result);
+                Logger.i("Client id is OAID/AAID: " + result);
                 if (callback != null) {
                     callback.onComplete(result, null);
                 }
@@ -148,7 +148,7 @@ public final class DeviceID {
             id = DeviceID.getWidevineID();
             if (!TextUtils.isEmpty(id)) {
                 Holder.INSTANCE.clientId = id;
-                Logger.print("Client id is WidevineID: " + id);
+                Logger.i("Client id is WidevineID: " + id);
                 if (callback != null) {
                     callback.onComplete(id, error);
                 }
@@ -158,7 +158,7 @@ public final class DeviceID {
         id = getAndroidID(application);
         if (!TextUtils.isEmpty(id)) {
             Holder.INSTANCE.clientId = id;
-            Logger.print("Client id is AndroidID: " + id);
+            Logger.i("Client id is AndroidID: " + id);
             if (callback != null) {
                 callback.onComplete(id, error);
             }
@@ -166,7 +166,7 @@ public final class DeviceID {
         }
         id = getGUID(application);
         Holder.INSTANCE.clientId = id;
-        Logger.print("Client id is GUID: " + id);
+        Logger.i("Client id is GUID: " + id);
         if (callback != null) {
             callback.onComplete(id, error);
         }
@@ -227,7 +227,7 @@ public final class DeviceID {
      */
     public static void getOAID(Context context, IMsaGetter getter) {
         IMsa ioaid = OAIDFactory.create(context);
-        Logger.print("OAID implements class: " + ioaid.getClass().getName());
+        Logger.i("OAID implements class: " + ioaid.getClass().getName());
         ioaid.doGet(getter);
     }
 
@@ -249,7 +249,7 @@ public final class DeviceID {
      */
     public static void getByManufacturer(Context context, IMsaGetter getter) {
         IMsa ioaid = OAIDFactory.ofManufacturer(context);
-        Logger.print("OAID implements class: " + ioaid.getClass().getName());
+        Logger.i("OAID implements class: " + ioaid.getClass().getName());
         ioaid.doGet(getter);
     }
 
@@ -261,7 +261,7 @@ public final class DeviceID {
      */
     public static void getByMsa(Context context, IMsaGetter getter) {
         IMsa ioaid = OAIDFactory.ofMsa(context);
-        Logger.print("OAID implements class: " + ioaid.getClass().getName());
+        Logger.i("OAID implements class: " + ioaid.getClass().getName());
         ioaid.doGet(getter);
     }
 
@@ -273,7 +273,7 @@ public final class DeviceID {
      */
     public static void getByGms(Context context, IMsaGetter getter) {
         IMsa ioaid = OAIDFactory.ofGms(context);
-        Logger.print("OAID implements class: " + ioaid.getClass().getName());
+        Logger.i("OAID implements class: " + ioaid.getClass().getName());
         ioaid.doGet(getter);
     }
 
@@ -292,7 +292,7 @@ public final class DeviceID {
     public static String getUniqueID(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             // Android 10+ 不允许获取 IMEI、MEID 之类的设备唯一标识
-            Logger.print("IMEI/MEID not allowed on Android 10+");
+            Logger.w("IMEI/MEID not allowed on Android 10+");
             return "";
         }
         if (context == null) {
@@ -301,7 +301,7 @@ public final class DeviceID {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                 && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) !=
                 PackageManager.PERMISSION_GRANTED) {
-            Logger.print("android.permission.READ_PHONE_STATE not granted");
+            Logger.w("android.permission.READ_PHONE_STATE not granted");
             // Android 6.0-9.0 需要申请电话权限才能获取设备唯一标识
             return "";
         }
@@ -322,10 +322,10 @@ public final class DeviceID {
             }
             return imei;
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Failed to get IMEI/MEID", e);
         } catch (Error e) {
             // e.g. NoSuchMethodError: No virtual method getMeid()
-            Logger.print(e);
+            Logger.e("IMEI/MEID getter error", e);
         }
         return "";
     }
@@ -372,7 +372,7 @@ public final class DeviceID {
             }
             return sb.toString();
         } catch (Throwable e) {
-            Logger.print(e);
+            Logger.e("Failed to get WidevineID", e);
         } finally {
             if (mediaDrm != null) {
                 //mediaDrm.close();
@@ -437,7 +437,7 @@ public final class DeviceID {
         }
         if (TextUtils.isEmpty(uuid)) {
             uuid = UUID.randomUUID().toString();
-            Logger.print("Generate uuid by random: " + uuid);
+            Logger.i("Generate uuid by random: " + uuid);
             saveUuidToSharedPreferences(context, uuid);
             saveUuidToSystemSettings(context, uuid);
             saveUuidToExternalStorage(context, uuid);
@@ -450,7 +450,7 @@ public final class DeviceID {
             return "";
         }
         String uuid = Settings.System.getString(context.getContentResolver(), "GUID_uuid");
-        Logger.print("Get uuid from system settings: " + uuid);
+        Logger.i("Get uuid from system settings: " + uuid);
         return uuid;
     }
 
@@ -461,12 +461,12 @@ public final class DeviceID {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(context)) {
             try {
                 Settings.System.putString(context.getContentResolver(), "GUID_uuid", uuid);
-                Logger.print("Save uuid to system settings: " + uuid);
+                Logger.i("Save uuid to system settings: " + uuid);
             } catch (Exception e) {
-                Logger.print(e);
+                Logger.e("Failed to save UUID to system settings", e);
             }
         } else {
-            Logger.print("android.permission.WRITE_SETTINGS not granted");
+            Logger.w("android.permission.WRITE_SETTINGS not granted");
         }
     }
 
@@ -480,10 +480,10 @@ public final class DeviceID {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 uuid = reader.readLine();
             } catch (Exception e) {
-                Logger.print(e);
+                Logger.e("Failed to read UUID from external storage", e);
             }
         }
-        Logger.print("Get uuid from external storage: " + uuid);
+        Logger.i("Get uuid from external storage: " + uuid);
         return uuid;
     }
 
@@ -493,7 +493,7 @@ public final class DeviceID {
         }
         File file = getGuidFile(context);
         if (file == null) {
-            Logger.print("UUID file in external storage is null");
+            Logger.w("UUID file in external storage is null");
             return;
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
@@ -502,9 +502,9 @@ public final class DeviceID {
             }
             writer.write(uuid);
             writer.flush();
-            Logger.print("Save uuid to external storage: " + uuid);
+            Logger.i("Save uuid to external storage: " + uuid);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Failed to save UUID to external storage", e);
         }
     }
 
@@ -530,7 +530,7 @@ public final class DeviceID {
         }
         SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
         preferences.edit().putString("uuid", uuid).apply();
-        Logger.print("Save uuid to shared preferences: " + uuid);
+        Logger.i("Save uuid to shared preferences: " + uuid);
     }
 
     private static String getUuidFromSharedPreferences(Context context) {
@@ -539,7 +539,7 @@ public final class DeviceID {
         }
         SharedPreferences preferences = context.getSharedPreferences("GUID", Context.MODE_PRIVATE);
         String uuid = preferences.getString("uuid", "");
-        Logger.print("Get uuid from shared preferences: " + uuid);
+        Logger.i("Get uuid from shared preferences: " + uuid);
         return uuid;
     }
 
@@ -560,7 +560,7 @@ public final class DeviceID {
             }
             return sb.toString();
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Failed to calculate hash", e);
             return "";
         }
     }

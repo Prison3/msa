@@ -42,7 +42,7 @@ public final class OAIDFactory {
         // 优先尝试各厂商自家提供的接口
         ioaid = createManufacturerImpl(context);
         if (ioaid != null && ioaid.supported()) {
-            Logger.print("Manufacturer interface has been found: " + ioaid.getClass().getName());
+            Logger.i("Manufacturer interface has been found: " + ioaid.getClass().getName());
             return ioaid;
         }
         // 再尝试移动安全联盟及谷歌服务框架提供的接口
@@ -127,18 +127,18 @@ public final class OAIDFactory {
         // 若各厂商自家没有提供接口，则优先尝试移动安全联盟的接口
         IMsa ioaid = new MsaImpl(context);
         if (ioaid.supported()) {
-            Logger.print("Mobile Security Alliance has been found: " + ioaid.getClass().getName());
+            Logger.i("Mobile Security Alliance has been found: " + ioaid.getClass().getName());
             return ioaid;
         }
         // 若不支持移动安全联盟的接口，则尝试谷歌服务框架的接口
         ioaid = new GmsImpl(context);
         if (ioaid.supported()) {
-            Logger.print("Google Play Service has been found: " + ioaid.getClass().getName());
+            Logger.i("Google Play Service has been found: " + ioaid.getClass().getName());
             return ioaid;
         }
         // 默认不支持
         ioaid = new DefaultImpl();
-        Logger.print("OAID/AAID was not supported: " + ioaid.getClass().getName());
+        Logger.w("OAID/AAID was not supported: " + ioaid.getClass().getName());
         return ioaid;
     }
 

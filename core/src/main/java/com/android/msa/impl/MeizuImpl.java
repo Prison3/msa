@@ -45,7 +45,7 @@ class MeizuImpl implements IMsa {
             ProviderInfo pi = context.getPackageManager().resolveContentProvider("com.meizu.flyme.openidsdk", 0);
             return pi != null;
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Meizu OAID supported check failed", e);
             return false;
         }
     }
@@ -64,10 +64,10 @@ class MeizuImpl implements IMsa {
             if (oaid == null || oaid.length() == 0) {
                 throw new MsaException("OAID query failed");
             }
-            Logger.print("OAID query success: " + oaid);
+            Logger.i("OAID query success: " + oaid);
             getter.onCompleted(oaid);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Meizu OAID query failed", e);
             getter.onError(e);
         }
     }

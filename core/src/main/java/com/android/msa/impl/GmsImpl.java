@@ -52,7 +52,7 @@ class GmsImpl implements IMsa {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.google.android.gms", 0);
             return pi != null;
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("GMS package check failed", e);
             return false;
         }
     }
@@ -69,7 +69,7 @@ class GmsImpl implements IMsa {
             public String callRemoteInterface(IBinder service) throws MsaException, RemoteException {
                 IAdvertisingIdService anInterface = IAdvertisingIdService.Stub.asInterface(service);
                 if (anInterface.isLimitAdTrackingEnabled(true)) {
-                    Logger.print("User has disabled advertising identifier");
+                    Logger.w("User has disabled advertising identifier");
                     // 从2022年开始，当isLimitAdTrackingEnabled()为true时，无论应用的目标SDK级别如何，getId()的返回值都是00000000-0000-0000-0000-000000000000
                     throw new MsaException("AAID acquire failed");
                 }

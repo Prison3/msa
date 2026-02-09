@@ -42,7 +42,7 @@ class XiaomiImpl implements IMsa {
             idProviderClass = Class.forName("com.android.id.impl.IdProviderImpl");
             idProviderImpl = idProviderClass.newInstance();
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Xiaomi IdProvider init failed", e);
         }
     }
 
@@ -65,10 +65,10 @@ class XiaomiImpl implements IMsa {
             if (oaid == null || oaid.length() == 0) {
                 throw new MsaException("OAID query failed");
             }
-            Logger.print("OAID query success: " + oaid);
+            Logger.i("OAID query success: " + oaid);
             getter.onCompleted(oaid);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Xiaomi OAID query failed", e);
             getter.onError(e);
         }
     }

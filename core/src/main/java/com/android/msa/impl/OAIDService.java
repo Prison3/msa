@@ -56,7 +56,7 @@ class OAIDService implements ServiceConnection {
             if (!ret) {
                 throw new MsaException("Service binding failed");
             }
-            Logger.print("Service has been bound: " + intent);
+            Logger.i("Service has been bound: " + intent);
         } catch (Exception e) {
             getter.onError(e);
         }
@@ -64,30 +64,30 @@ class OAIDService implements ServiceConnection {
 
     @Override
     public void onServiceConnected(ComponentName name, IBinder service) {
-        Logger.print("Service has been connected: " + name.getClassName());
+        Logger.i("Service has been connected: " + name.getClassName());
         try {
             String oaid = caller.callRemoteInterface(service);
             if (oaid == null || oaid.length() == 0) {
                 throw new MsaException("OAID/AAID acquire failed");
             }
-            Logger.print("OAID/AAID acquire success: " + oaid);
+            Logger.i("OAID/AAID acquire success: " + oaid);
             getter.onCompleted(oaid);
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("OAID/AAID acquire failed", e);
             getter.onError(e);
         } finally {
             try {
                 context.unbindService(this);
-                Logger.print("Service has been unbound: " + name.getClassName());
+                Logger.i("Service has been unbound: " + name.getClassName());
             } catch (Exception e) {
-                Logger.print(e);
+                Logger.e("Failed to unbind service", e);
             }
         }
     }
 
     @Override
     public void onServiceDisconnected(ComponentName name) {
-        Logger.print("Service has been disconnected: " + name.getClassName());
+        Logger.i("Service has been disconnected: " + name.getClassName());
     }
 
     @FunctionalInterface

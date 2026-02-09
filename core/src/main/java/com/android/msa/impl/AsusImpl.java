@@ -46,7 +46,7 @@ class AsusImpl implements IMsa {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.asus.msa.SupplementaryDID", 0);
             return pi != null;
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("ASUS SupplementaryDID package check failed", e);
             return false;
         }
     }

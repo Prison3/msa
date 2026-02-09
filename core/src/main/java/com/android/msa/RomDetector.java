@@ -39,7 +39,7 @@ public final class RomDetector {
             Method method = clazz.getMethod("get", new Class<?>[]{String.class, String.class});
             res = (String) method.invoke(clazz, new Object[]{key, defValue});
         } catch (Throwable e) {
-            Logger.print("System property invoke error: " + e);
+            Logger.w("System property invoke error: " + e);
         }
         if (res == null) {
             res = "";

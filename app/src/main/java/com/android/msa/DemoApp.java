@@ -29,10 +29,6 @@ import com.android.msa.Logger;
 public class DemoApp extends Application {
     private boolean privacyPolicyAgreed = false;
 
-    static {
-        // 开启日志打印，默认是关闭的，启动本应用会打印如下类似的日志：
-        Logger.enable();
-    }
 
     @Override
     protected void attachBaseContext(Context base) {

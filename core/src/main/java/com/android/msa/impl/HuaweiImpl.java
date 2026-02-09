@@ -60,7 +60,7 @@ class HuaweiImpl implements IMsa {
                 return true;
             }
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Huawei OAID availability check failed", e);
         }
         return false;
     }
@@ -95,7 +95,7 @@ class HuaweiImpl implements IMsa {
             }
             postOnMainThread(getter, info.getId());
         } catch (IOException e) {
-            Logger.print(e);
+            Logger.e("Huawei OAID query failed", e);
             postOnMainThread(getter, new MsaException(e));
         }
     }

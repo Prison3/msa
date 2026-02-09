@@ -60,7 +60,7 @@ class OppoImpl implements IMsa {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.heytap.openid", 0);
             return pi != null;
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Oppo openid package check failed", e);
             return false;
         }
     }

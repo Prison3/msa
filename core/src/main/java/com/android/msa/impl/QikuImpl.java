@@ -53,7 +53,7 @@ public class QikuImpl implements IMsa {
                 return new QikuIdmanager().isSupported();
             }
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Qiku OAID supported check failed", e);
             return false;
         }
     }

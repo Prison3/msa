@@ -15,40 +15,77 @@ package com.android.msa;
 
 import android.util.Log;
 
-/**
- * 调试日志工具类
- *
- * @author 贵州山魈羡民 (1032694760@qq.com)
- * @since 2021/3/26 21:34
- */
 public final class Logger {
-    private static final String TAG = "OAID";
-    private static boolean enable = false;
+    private static final String TAG = "MSA";
+
+    /** 是否启用日志输出，默认 true */
+    private static boolean enabled = true;
 
     private Logger() {
         super();
     }
 
     /**
-     * 启用调试日志
+     * 设置是否启用日志输出
+     *
+     * @param enabled true 启用，false 禁用
      */
-    public static void enable() {
-        enable = true;
+    public static void setEnabled(boolean enabled) {
+        Logger.enabled = enabled;
     }
 
     /**
-     * 打印调试日志
-     *
-     * @param log 日志信息
+     * 是否启用日志输出
      */
-    public static void print(Object log) {
-        if (!enable) {
-            return;
-        }
-        if (log == null) {
-            log = "<null>";
-        }
-        Log.i(TAG, log.toString());
+    public static boolean isEnabled() {
+        return enabled;
     }
 
+    /**
+     * 打印带 Throwable 的日志
+     *
+     * @param msg 日志信息
+     * @param t   异常
+     */
+    public static void print(String msg, Throwable t) {
+        if (enabled) {
+            Log.i(TAG, msg + '\n' + Log.getStackTraceString(t));
+        }
+    }
+
+    public static void v(String msg) {
+        if (enabled) Log.v(TAG, msg);
+    }
+
+    public static void d(String msg) {
+        if (enabled) Log.d(TAG, msg);
+    }
+
+    public static void i(String msg) {
+        if (enabled) Log.i(TAG, msg);
+    }
+
+    public static void w(String msg) {
+        if (enabled) Log.w(TAG, msg);
+    }
+
+    public static void w(Throwable t) {
+        if (enabled) Log.w(TAG, Log.getStackTraceString(t));
+    }
+
+    public static void w(String msg, Throwable t) {
+        if (enabled) Log.w(TAG, msg + '\n' + Log.getStackTraceString(t));
+    }
+
+    public static void e(String msg) {
+        if (enabled) Log.e(TAG, msg);
+    }
+
+    public static void e(Throwable t) {
+        if (enabled) Log.e(TAG, Log.getStackTraceString(t));
+    }
+
+    public static void e(String msg, Throwable t) {
+        if (enabled) Log.e(TAG, msg + '\n' + Log.getStackTraceString(t));
+    }
 }

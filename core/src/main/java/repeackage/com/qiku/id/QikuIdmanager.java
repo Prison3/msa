@@ -51,8 +51,7 @@ public final class QikuIdmanager {
                 mIBinder = (IBinder) method_getService.invoke(null, "qikuid");
             }
         } catch (Throwable e) {
-            Logger.print("Failure get qikuid service");
-            Logger.print(e);
+            Logger.e("Failure get qikuid service", e);
         }
     }
 
@@ -65,7 +64,7 @@ public final class QikuIdmanager {
                 int result = reply.readInt();
                 return result == 1;
             } catch (RemoteException e) {
-                Logger.print(e);
+                Logger.e("Qiku isSupported transact failed", e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -82,7 +81,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_UDID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                Logger.print(e);
+                Logger.e("Qiku getUDID transact failed", e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -99,7 +98,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_OAID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                Logger.print(e);
+                Logger.e("Qiku getOAID transact failed", e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -116,7 +115,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_VAID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                Logger.print(e);
+                Logger.e("Qiku getVAID transact failed", e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -133,7 +132,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_GET_AAID, data, reply, 0);
                 return reply.readString();
             } catch (RemoteException e) {
-                Logger.print(e);
+                Logger.e("Qiku getAAID transact failed", e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -149,7 +148,7 @@ public final class QikuIdmanager {
             try {
                 mIBinder.transact(CODE_SHUTDOWN, data, reply, 0);
             } catch (RemoteException e) {
-                Logger.print(e);
+                Logger.e("Qiku shutDown transact failed", e);
             } finally {
                 data.recycle();
                 reply.recycle();
@@ -168,7 +167,7 @@ public final class QikuIdmanager {
                 mIBinder.transact(CODE_LIMIT_READ_OAID, data, reply, 0);
                 return reply.readInt() != 0;
             } catch (RemoteException e) {
-                Logger.print(e);
+                Logger.e("Qiku isLimited transact failed", e);
             } finally {
                 data.recycle();
                 reply.recycle();

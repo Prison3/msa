@@ -45,7 +45,7 @@ class SamsungImpl implements IMsa {
             PackageInfo pi = context.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
             return pi != null;
         } catch (Exception e) {
-            Logger.print(e);
+            Logger.e("Samsung deviceidservice package check failed", e);
             return false;
         }
     }

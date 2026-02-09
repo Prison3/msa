@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements ActivityResultCal
         } else if (id == R.id.btn_get_by_gms) {
             DeviceID.getByGms(this, new ToastGetter(this));
         } else {
-            Logger.print("\"if ... else if\" constructs should end with \"else\" clauses.");
+            Logger.w("\"if ... else if\" constructs should end with \"else\" clauses.");
         }
     }
 
