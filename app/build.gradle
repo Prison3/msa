@@ -61,27 +61,34 @@ android {
         ]
     }
 
-    // 打包维度列表，会按维度名字母顺序执行，最终发布的具体渠道包的生成可以借助360加固等工具
-    productFlavors {
-        // 发布模式/正式环境
-        pub {
-            dimension "MODE"
-            // 服务端接口地址
-            buildConfigField "String", "API_BASE_URL", '"https://api.example.com"'
-            // 修改 AndroidManifest.xml 里的变量
-            manifestPlaceholders = [
-                    MY_CHANNEL: "publisher-default",
-            ]
+    signingConfigs {
+        release {
+            storeFile file("../android.keystore")
+            storePassword '123456'
+            keyAlias 'android'
+            keyPassword '123456'
         }
-        // 开发模式/测试环境
-        dev {
-            dimension "MODE"
-            // 服务端接口地址
-            buildConfigField "String", "API_BASE_URL", '"https://test.example.com"'
-            manifestPlaceholders = [
-                    MY_CHANNEL: "developer-default",
-            ]
+        debug {
+            storeFile file("../android.keystore")
+            storePassword '123456'
+            keyAlias 'android'
+            keyPassword '123456'
         }
     }
 
+    buildTypes {
+        release {
+            minifyEnabled false
+            jniDebuggable = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            applicationVariants.all {
+                variant ->
+                    variant.outputs.all {
+                        outputFileName = "${applicationId}_${defaultConfig.versionCode}.apk"
+                    }
+            }
+        }
+    }
+   
 }

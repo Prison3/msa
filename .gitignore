@@ -45,9 +45,6 @@ gradle-app.setting
 .externalNativeBuild/
 .cxx/
 
-# Signing (do not commit release keystores)
-*.jks
-*.keystore
 # Uncomment if you don't want to track debug.keystore
 # **/debug.keystore
 
